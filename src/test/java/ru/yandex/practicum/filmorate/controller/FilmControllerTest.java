@@ -15,14 +15,14 @@ public class FilmControllerTest {
     Film film;
 
     @BeforeEach
-    void BeforeEach(){
+    void beforeEach() {
         filmController = new FilmController();
-        film = new Film(0,"Звездные войны", "Фильм о событиях далекой галактики",
+        film = new Film(0, "Звездные войны", "Фильм о событиях далекой галактики",
                 LocalDate.of(1977, Month.MAY, 25), 121);
     }
 
     @Test
-    void createFilm(){
+    void createFilm() {
         Film createdFilm = filmController.create(film);
         ArrayList<Film> films = new ArrayList<>(filmController.findAll());
         Assertions.assertFalse(films.isEmpty());
@@ -30,7 +30,7 @@ public class FilmControllerTest {
     }
 
     @Test
-    void updateFilm(){
+    void updateFilm() {
         Film createdFilm = filmController.create(film);
         createdFilm.setName("Не звездные войны");
         filmController.update(createdFilm);

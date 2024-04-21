@@ -15,14 +15,14 @@ public class UserControllerTest {
     User user;
 
     @BeforeEach
-    void BeforeEach(){
+    void beforeEach() {
         userController = new UserController();
-        user = new User(0,"someemail@yandex.ru", "somelogin", "Олег",
+        user = new User(0, "someemail@yandex.ru", "somelogin", "Олег",
                 LocalDate.of(2004, Month.MAY, 18));
     }
 
     @Test
-    void createUser(){
+    void createUser() {
         User createdUser = userController.create(user);
         ArrayList<User> users = new ArrayList<>(userController.findAll());
         Assertions.assertFalse(users.isEmpty());
@@ -30,7 +30,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void updateFilm(){
+    void updateFilm() {
         User createdUser = userController.create(user);
         createdUser.setName("Игорь");
         userController.update(user);
