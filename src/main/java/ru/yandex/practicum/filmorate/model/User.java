@@ -9,18 +9,18 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class User {
-    Integer id;
+    private Integer id;
     @Email(message = "Неверный формат email")
     @NotBlank(message = "email не может быть пустым")
-    String email;
+    private String email;
     @NotBlank(message = "Логин не может быть пустым")
     @Pattern(regexp = "^[A-Za-z0-9_.-]*$",
             message = "Логин должен быть без пробелов, "
                     + "и содержать только Латинские буквы и символы: \"_\" \"-\" \".\"")
-    String login;
-    String name;
+    private String login;
+    private String name;
     @PastOrPresent
-    LocalDate birthday;
+    private LocalDate birthday;
 
     public String getName() {
         if (name != null) {

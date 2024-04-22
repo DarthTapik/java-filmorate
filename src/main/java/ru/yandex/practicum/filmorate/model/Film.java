@@ -11,14 +11,14 @@ import java.time.Month;
 @AllArgsConstructor
 public class Film {
 
-    Integer id;
+    private Integer id;
     @NotBlank(message = "Название не может быть пустым")
-    String name;
+    private String name;
     @Size(max = 200, message = "Максимальная длина описания 200 символов")
-    String description;
-    LocalDate releaseDate;
+    private String description;
+    private LocalDate releaseDate;
     @Positive(message = "Длительность не может быть отрицательной")
-    int duration;
+    private int duration;
 
     @AssertTrue(message = "Дата релиза не может быть раньше чем 28 Декабря 1895 года")
     private boolean isValidReleaseDate() {
