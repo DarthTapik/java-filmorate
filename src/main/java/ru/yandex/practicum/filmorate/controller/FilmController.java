@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class FilmController {
 
     @GetMapping
     public Collection<Film> findAll() {
-        return films.values();
+        return new ArrayList<>(films.values());
     }
 
     @PostMapping
