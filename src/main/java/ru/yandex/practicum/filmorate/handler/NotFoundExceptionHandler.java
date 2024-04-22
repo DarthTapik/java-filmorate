@@ -7,18 +7,21 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @ControllerAdvice
 public class NotFoundExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleException(NotFoundException e) {
+    public ResponseEntity<Map<String, String>> handleException(NotFoundException e) {
         log.warn(e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .header("Content-Type", "application/json")
-                .body("{}");
-        // Временный костыль, не придумал чем заменить, Postman ожидает пустое тело
+        Map<String, String> response = new HashMap<>();
+        response.put("error", e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+
     }
 
 }

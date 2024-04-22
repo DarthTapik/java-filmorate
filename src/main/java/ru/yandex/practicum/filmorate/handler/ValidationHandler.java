@@ -7,16 +7,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @ControllerAdvice
 public class ValidationHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<String> handleException(MethodArgumentNotValidException e) {
+    public ResponseEntity<Map<String, String>> handleException(MethodArgumentNotValidException e) {
         log.warn(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .header("Content-Type", "application/json")
-                .body("{}");
+        Map<String, String> response = new HashMap<>();
+        response.put("error", e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 }
