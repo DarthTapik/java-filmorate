@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.UserOperationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -11,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserStorage userStorage;
 
@@ -28,23 +31,27 @@ public class UserService {
 
     public User createUser(User user) {
         user.setFriends(new HashSet<>());
+        log.debug("Создан пользователь с id " + user.getId());
         return userStorage.addUser(user);
     }
 
     public User updateUser(User user) {
         User oldUser = userStorage.getUser(user.getId());
         user.setFriends(oldUser.getFriends());
+        log.debug("Обновлен пользователь с id " + user.getId());
         return userStorage.updateUser(user);
     }
 
     public void addFriendToUser(int userId, int friendId) {
         if (userId == friendId) {
-            throw new RuntimeException("Пользователь не может добавить самого себя в друзья");
+            throw new UserOperationException(
+                    "Пользователь не может добавить самого себя в друзья");
         }
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
         user.addFriend(friend.getId());
         friend.addFriend(user.getId());
+        log.debug("Пользователь " + userId + " добавил в друзья " + friendId);
     }
 
     public void removeFriendFromUser(int userId, int friendId) {
@@ -55,6 +62,8 @@ public class UserService {
         User friend = userStorage.getUser(friendId);
         user.removeFriend(friend.getId());
         friend.removeFriend(user.getId());
+        log.debug("Пользователь " + userId + " убрал из друзей " + friendId);
+
     }
 
     public Collection<User> getUsersFriends(int userId) {

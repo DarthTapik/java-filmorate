@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
@@ -9,6 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class FilmService {
 
     private final FilmStorage filmStorage;
@@ -24,6 +26,8 @@ public class FilmService {
     }
 
     public Film createFilm(Film film) {
+        film.setLikes(new HashSet<>());
+        log.debug("Создан фильм с id " + film.getId());
         return filmStorage.addFilm(film);
     }
 
@@ -31,6 +35,7 @@ public class FilmService {
         Film oldFilm = filmStorage.getFilm(film.getId());
         film.setLikes(oldFilm.getLikes());
         film.setLikesCount(oldFilm.getLikesCount());
+        log.debug("Обновлен фильм с id " + film.getId());
         return filmStorage.updateFilm(film);
     }
 
@@ -41,11 +46,14 @@ public class FilmService {
     public void addLikeToFilm(int filmId, int userId) {
         User user = userService.getUser(userId); // Если пользователь не найден, вызывается исключение
         filmStorage.getFilm(filmId).addLike(user.getId());
+        log.debug("Добавлен лайк на фильм " + filmId + " пользователем " + userId);
     }
 
     public void removeLikeFromFilm(int filmId, int userId) {
         User user = userService.getUser(userId);
         filmStorage.getFilm(filmId).deleteLike(user.getId());
+        log.debug("Удален лайк с фильма " + filmId + " пользователем " + userId);
+
     }
 
     public Collection<Film> getMostLikedFilms(int count) {
