@@ -6,10 +6,7 @@ import ru.yandex.practicum.filmorate.exception.UserOperationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,9 +66,10 @@ public class UserService {
     public Collection<User> getUsersFriends(int userId) {
         User user = userStorage.getUser(userId);
         Set<Integer> friendsId = user.getFriends();
-        return friendsId.stream()
+        List userList = friendsId.stream()
                 .map(userStorage::getUser)
                 .collect(Collectors.toList());
+        return new ArrayList<User>(userList);
     }
 
     public Collection<User> getUsersCommonFriends(int userId, int friendId) {
@@ -81,9 +79,10 @@ public class UserService {
         User user = userStorage.getUser(userId);
         Set<Integer> userFriendsId = user.getFriends();
 
-        return friendFriendsId.stream()
+        List commonFriends = friendFriendsId.stream()
                 .filter(userFriendsId::contains)
                 .map(userStorage::getUser)
                 .collect(Collectors.toList());
+        return new ArrayList<>(commonFriends);
     }
 }

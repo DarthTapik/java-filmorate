@@ -61,9 +61,10 @@ public class FilmService {
         if (count > films.size()) {
             count = films.size();
         }
-        return films.stream()
+        List mostLikedFilms = films.stream()
                 .sorted(Comparator.comparingInt(Film::getLikesCount).reversed())
                 .limit(count)
                 .collect(Collectors.toList());
+        return new ArrayList<>(mostLikedFilms);
     }
 }

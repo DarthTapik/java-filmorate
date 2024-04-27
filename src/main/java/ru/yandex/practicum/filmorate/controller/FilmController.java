@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -27,7 +26,7 @@ public class FilmController {
 
     @GetMapping
     public Collection<Film> findAll() {
-        return new ArrayList<>(filmService.getAllFilms());
+        return filmService.getAllFilms();
     }
 
     @PostMapping

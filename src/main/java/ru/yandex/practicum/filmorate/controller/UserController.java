@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class UserController {
 
     @GetMapping
     public Collection<User> findAll() {
-        return new ArrayList<>(userService.getAllUser());
+        return userService.getAllUser();
     }
 
     @PostMapping
@@ -57,11 +56,11 @@ public class UserController {
 
     @GetMapping("/{id}/friends")
     public Collection<User> getFriends(@PathVariable int id) {
-        return new ArrayList<>(userService.getUsersFriends(id));
+        return userService.getUsersFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{friendId}")
     public Collection<User> getCommonFriends(@PathVariable int id, @PathVariable int friendId) {
-        return new ArrayList<>(userService.getUsersCommonFriends(id, friendId));
+        return userService.getUsersCommonFriends(id, friendId);
     }
 }
