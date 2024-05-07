@@ -24,6 +24,8 @@ public class Film {
     private int duration;
     private Set<Integer> likes;
     private int likesCount = 0;
+    private Set<String> genres;
+    private String rating;
 
     @AssertTrue(message = "Дата релиза не может быть раньше чем 28 Декабря 1895 года")
     private boolean isValidReleaseDate() {
@@ -33,6 +35,10 @@ public class Film {
     @Autowired
     public void setLikes(Set<Integer> likes) {
         this.likes = new HashSet<>(likes);
+    }
+
+    public void setGenre(Set<String> genres) {
+        this.genres = new HashSet<>(genres);
     }
 
     public void addLike(Integer id) {
