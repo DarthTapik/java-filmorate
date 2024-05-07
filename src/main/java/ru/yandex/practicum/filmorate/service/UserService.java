@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserOperationException;
+import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -27,7 +28,7 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        user.setFriends(new HashSet<>());
+        user.setFriends(new HashMap<>());
         log.debug("Создан пользователь с id " + user.getId());
         return userStorage.addUser(user);
     }
@@ -46,9 +47,20 @@ public class UserService {
         }
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
-        user.addFriend(friend.getId());
-        friend.addFriend(user.getId());
-        log.debug("Пользователь " + userId + " добавил в друзья " + friendId);
+        if (friend.getFriends().containsKey(user.getId())){
+            user.addFriend(friend.getId(), FriendshipStatus.CONFIRMED);
+            friend.addFriend(user.getId(), FriendshipStatus.CONFIRMED);
+            log.debug("Пользователь " + userId
+                    + " принял заявку на добавление в друзья " + friendId);
+        }
+        else {
+            user.addFriend(friend.getId(), FriendshipStatus.NOT_CONFIRMED);
+            log.debug("Пользователь " + userId
+                    + " подал заявку на добавление в друзья " + friendId);
+        }
+
+
+
     }
 
     public void removeFriendFromUser(int userId, int friendId) {
@@ -65,24 +77,26 @@ public class UserService {
 
     public Collection<User> getUsersFriends(int userId) {
         User user = userStorage.getUser(userId);
-        Set<Integer> friendsId = user.getFriends();
-        List userList = friendsId.stream()
-                .map(userStorage::getUser)
+        HashMap<Integer, FriendshipStatus> friendsId = user.getFriends();
+        List<User> userList = friendsId.entrySet().stream()
+                .filter(entry -> entry.getValue() == FriendshipStatus.CONFIRMED)
+                .map(entry -> userStorage.getUser(entry.getKey()))
                 .collect(Collectors.toList());
-        return new ArrayList<User>(userList);
+        return new ArrayList<>(userList);
     }
-
     public Collection<User> getUsersCommonFriends(int userId, int friendId) {
         User friend = userStorage.getUser(friendId);
-        Set<Integer> friendFriendsId = friend.getFriends();
+        HashMap<Integer, FriendshipStatus> friendFriendsId = friend.getFriends();
 
         User user = userStorage.getUser(userId);
-        Set<Integer> userFriendsId = user.getFriends();
+        HashMap<Integer, FriendshipStatus> userFriendsId = user.getFriends();
 
-        List commonFriends = friendFriendsId.stream()
-                .filter(userFriendsId::contains)
-                .map(userStorage::getUser)
+        List<User> commonFriends = friendFriendsId.entrySet().stream()
+                .filter(entry -> userFriendsId.containsKey(entry.getKey())
+                        && userFriendsId.get(entry.getKey()) == FriendshipStatus.CONFIRMED)
+                .map(entry -> userStorage.getUser(entry.getKey()))
                 .collect(Collectors.toList());
+
         return new ArrayList<>(commonFriends);
     }
 }
