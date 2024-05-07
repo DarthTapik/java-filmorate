@@ -47,18 +47,16 @@ public class UserService {
         }
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
-        if (friend.getFriends().containsKey(user.getId())){
+        if (friend.getFriends().containsKey(user.getId())) {
             user.addFriend(friend.getId(), FriendshipStatus.CONFIRMED);
             friend.addFriend(user.getId(), FriendshipStatus.CONFIRMED);
             log.debug("Пользователь " + userId
                     + " принял заявку на добавление в друзья " + friendId);
-        }
-        else {
+        } else {
             user.addFriend(friend.getId(), FriendshipStatus.NOT_CONFIRMED);
             log.debug("Пользователь " + userId
                     + " подал заявку на добавление в друзья " + friendId);
         }
-
 
 
     }
@@ -84,6 +82,7 @@ public class UserService {
                 .collect(Collectors.toList());
         return new ArrayList<>(userList);
     }
+
     public Collection<User> getUsersCommonFriends(int userId, int friendId) {
         User friend = userStorage.getUser(friendId);
         HashMap<Integer, FriendshipStatus> friendFriendsId = friend.getFriends();
