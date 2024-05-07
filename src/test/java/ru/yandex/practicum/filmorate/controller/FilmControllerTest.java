@@ -24,7 +24,7 @@ public class FilmControllerTest {
         filmController = new FilmController(new FilmService(new InMemoryFilmStorage(),
                 new UserService(new InMemoryUserStorage())));
         film = new Film(0, "Звездные войны", "Фильм о событиях далекой галактики",
-                LocalDate.of(1977, Month.MAY, 25), 121, new HashSet<>(), 0);
+                LocalDate.of(1977, Month.MAY, 25), 121, new HashSet<>(), 0, new HashSet<>(), "");
     }
 
     @Test

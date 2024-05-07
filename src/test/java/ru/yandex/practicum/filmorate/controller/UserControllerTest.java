@@ -10,7 +10,7 @@ import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class UserControllerTest {
 
@@ -21,7 +21,7 @@ public class UserControllerTest {
     void beforeEach() {
         userController = new UserController(new UserService(new InMemoryUserStorage()));
         user = new User(0, "someemail@yandex.ru", "somelogin", "Олег",
-                LocalDate.of(2004, Month.MAY, 18), new HashSet<>());
+                LocalDate.of(2004, Month.MAY, 18), new HashMap<>());
     }
 
     @Test
