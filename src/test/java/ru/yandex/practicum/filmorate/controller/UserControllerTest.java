@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class UserControllerTest {
 
@@ -21,7 +22,7 @@ public class UserControllerTest {
     void beforeEach() {
         userController = new UserController(new UserService(new InMemoryUserStorage()));
         user = new User(0, "someemail@yandex.ru", "somelogin", "Олег",
-                LocalDate.of(2004, Month.MAY, 18), new HashMap<>());
+                LocalDate.of(2004, Month.MAY, 18), new HashSet<>());
     }
 
     @Test

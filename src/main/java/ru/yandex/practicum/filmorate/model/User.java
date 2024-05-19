@@ -7,6 +7,8 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +25,7 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
-    private HashMap<Integer, FriendshipStatus> friends;
+    private Set<Integer> friends = new HashSet<>();
 
     public String getName() {
         if (name != null) {
@@ -33,12 +35,12 @@ public class User {
         }
     }
 
-    public void setFriends(HashMap<Integer, FriendshipStatus> friends) {
-        this.friends = new HashMap<>(friends);
+    public void setFriends(Set<Integer> friends) {
+        this.friends = new HashSet<>(friends);
     }
 
-    public void addFriend(int id, FriendshipStatus status) {
-        friends.put(id, status);
+    public void addFriend(int id) {
+        friends.add(id);
     }
 
     public void removeFriend(int id) {
