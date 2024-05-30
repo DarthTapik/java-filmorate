@@ -7,7 +7,7 @@
 
 ER-диаграмма
 
-![ER_diagram](https://github.com/DarthTapik/java-filmorate/blobadd-database/filmorate_db_er-diagram.png)
+![ER_diagram](https://github.com/DarthTapik/java-filmorate/blob/add-database/filmorate_db_er-diagram.png)
 
 idef1x-диаграмма
 
