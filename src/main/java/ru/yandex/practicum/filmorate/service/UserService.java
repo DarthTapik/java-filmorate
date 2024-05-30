@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserOperationException;
-import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserStorage userStorage;
 
-    public UserService(UserStorage userStorage) {
+    public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -28,14 +28,12 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        user.setFriends(new HashMap<>());
+        user.setFriends(new HashSet<>());
         log.debug("Создан пользователь с id " + user.getId());
         return userStorage.addUser(user);
     }
 
     public User updateUser(User user) {
-        User oldUser = userStorage.getUser(user.getId());
-        user.setFriends(oldUser.getFriends());
         log.debug("Обновлен пользователь с id " + user.getId());
         return userStorage.updateUser(user);
     }
@@ -48,8 +46,8 @@ public class UserService {
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
         user.addFriend(friend.getId());
-        friend.addFriend(user.getId());
-        log.debug("Пользователь " + userId + " добавил в друзья " + friendId);
+        userStorage.updateUser(user);
+        log.info("Пользователь " + userId + " добавил в друзья " + friendId);
     }
 
     public void removeFriendFromUser(int userId, int friendId) {
@@ -59,9 +57,8 @@ public class UserService {
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
         user.removeFriend(friend.getId());
-        friend.removeFriend(user.getId());
         log.debug("Пользователь " + userId + " убрал из друзей " + friendId);
-
+        userStorage.updateUser(user);
     }
 
     public Collection<User> getUsersFriends(int userId) {
