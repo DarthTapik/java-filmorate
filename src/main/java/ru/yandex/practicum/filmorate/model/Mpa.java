@@ -7,7 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rating {
+public class Mpa {
     private int id;
     private String name;
+
+    public Mpa(int id) {
+        this.id = id;
+    }
 }
