@@ -87,17 +87,16 @@ public class FilmDbStorage implements FilmStorage {
         }
 
         int id = film.getId();
-        if (film.getGenres() != null) {
-            for (Genre genre : film.getGenres()) {
-                jdbcTemplate.update(FILM_INSERT_GENRE_QUERY, id, genre.getId());
-            }
-        }
+        film.getGenres().stream()
+                .forEach(
+                        genre -> jdbcTemplate.update(FILM_INSERT_GENRE_QUERY, id, genre.getId())
+                );
 
-        if (!film.getLikes().isEmpty()) {
-            for (int userId : film.getLikes()) {
-                jdbcTemplate.update(FILM_INSERT_LIKE_QUERY, id, userId);
-            }
-        }
+
+        film.getLikes().stream()
+                .forEach(
+                        userId -> jdbcTemplate.update(FILM_INSERT_LIKE_QUERY, id, userId)
+                );
         return film;
     }
 
@@ -116,30 +115,27 @@ public class FilmDbStorage implements FilmStorage {
                 film.getId());
         jdbcTemplate.update(FILM_DELETE_GENRE_QUERY, film.getId()); // т.к. жанров не так много
         int id = film.getId();
-        if (!film.getGenres().isEmpty()) {
-            for (Genre genre : film.getGenres()) {
-                jdbcTemplate.update(FILM_INSERT_GENRE_QUERY, id, genre.getId());
-            }
-        }
+        film.getGenres().stream()
+                .forEach(
+                        genre -> jdbcTemplate.update(FILM_INSERT_GENRE_QUERY, id, genre.getId())
+                );
+
 
         Set<Integer> oldLikes = getLikes(film.getId());
         Set<Integer> removeLikes = oldLikes;
         removeLikes.removeAll(film.getLikes());
-        if (!removeLikes.isEmpty()) {
-            for (int userId : removeLikes) {
-                jdbcTemplate.update(FILM_DELETE_LIKE_QUERY, id, userId);
-            }
-        }
+        removeLikes.stream()
+                .forEach(
+                        userId -> jdbcTemplate.update(FILM_INSERT_LIKE_QUERY, id, userId)
+                );
         oldLikes = getLikes(film.getId());
         Set<Integer> addLikes = film.getLikes();
         addLikes.removeAll(oldLikes);
 
-        if (!addLikes.isEmpty()) {
-            for (Integer userId : addLikes) {
-                jdbcTemplate.update(FILM_INSERT_LIKE_QUERY, id, userId);
-            }
-        }
-
+        removeLikes.stream()
+                .forEach(
+                        userId -> jdbcTemplate.update(FILM_INSERT_LIKE_QUERY, id, userId)
+                );
         return film;
     }
 
@@ -151,9 +147,11 @@ public class FilmDbStorage implements FilmStorage {
         }
         jdbcTemplate.update(FILM_DELETE_QUERY, id);
         jdbcTemplate.update(FILM_DELETE_GENRE_QUERY, id);
-        for (int likeId : film.getLikes()) {
-            jdbcTemplate.update(FILM_DELETE_LIKE_QUERY, id, likeId);
-        }
+        film.getLikes().stream()
+                .forEach(
+                        userId ->  jdbcTemplate.update(FILM_DELETE_LIKE_QUERY, id, userId)
+                );
+
         return film;
     }
 

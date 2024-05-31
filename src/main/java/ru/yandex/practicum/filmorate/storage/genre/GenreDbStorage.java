@@ -15,7 +15,6 @@ import java.util.List;
 public class GenreDbStorage implements GenreStorage {
 
     private final JdbcTemplate jdbcTemplate;
-
     private static final String GENRE_INSERT_QUERY = "INSERT INTO Genre(name) VALUES (?)";
     private static final String GENRE_UPDATE_QUERY = "UPDATE Genre SET name = ? WHERE genre_id = ?";
     private static final String GENRE_DELETE_QUERY = "DELETE Genre WHERE genre_id = ?";

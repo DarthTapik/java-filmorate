@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserOperationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
@@ -30,13 +29,11 @@ public class FilmService {
         if (film.getMpa().getId() > 5) {
             throw new UserOperationException("Неверный рейтинг");
         }
-        if (!film.getGenres().isEmpty()) {
-            for (Genre genre : film.getGenres()) {
-                if (genre.getId() > 6) {
-                    throw new UserOperationException("Неверный жанр");
-                }
-            }
+
+        if (film.getGenres().stream().anyMatch(genre -> genre.getId() > 6)) {
+            throw new UserOperationException("Неверный жанр");
         }
+
         log.debug("Создан фильм с id " + film.getId());
         return filmStorage.addFilm(film);
     }

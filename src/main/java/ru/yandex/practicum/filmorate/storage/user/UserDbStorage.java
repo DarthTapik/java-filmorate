@@ -57,9 +57,10 @@ public class UserDbStorage implements UserStorage {
 
         if (keyHolder.getKey() != null) {
             user.setId(keyHolder.getKey().intValue());
-            for (Integer id : user.getFriends()) {
-                jdbcTemplate.update(USER_INSERT_FRIEND_QUERY, user.getId(), id);
-            }
+            user.getFriends().stream()
+                    .forEach(
+                            id -> jdbcTemplate.update(USER_INSERT_FRIEND_QUERY, user.getId(), id)
+                    );
         }
         return user;
     }
@@ -80,21 +81,23 @@ public class UserDbStorage implements UserStorage {
 
         Set<Integer> removeFriend = oldFriends;
         removeFriend.removeAll(user.getFriends());
-        if (!removeFriend.isEmpty()) {
-            for (Integer id : removeFriend) {
-                jdbcTemplate.update(USER_DELETE_FRIEND_QUERY, user.getId(), id);
-            }
-        }
+        removeFriend.stream()
+                .forEach(
+                        id -> jdbcTemplate.update(USER_DELETE_FRIEND_QUERY, user.getId(), id)
+                );
+        removeFriend.stream()
+                .forEach(
+                        id -> jdbcTemplate.update(USER_DELETE_FRIEND_QUERY, user.getId(), id)
+                );
+
         oldFriends = getFriends(user.getId());
         Set<Integer> addFriend = user.getFriends();
         addFriend.removeAll(oldFriends);
 
-        if (!addFriend.isEmpty()) {
-            for (Integer id : addFriend) {
-                jdbcTemplate.update(USER_INSERT_FRIEND_QUERY, user.getId(), id);
-            }
-        }
-
+        addFriend.stream()
+                .forEach(
+                        id -> jdbcTemplate.update(USER_INSERT_FRIEND_QUERY, user.getId(), id)
+                );
         return user;
     }
 
@@ -104,9 +107,10 @@ public class UserDbStorage implements UserStorage {
         if (user == null) {
             throw new NotFoundException("Пользователь с id " + user.getId() + " не найден");
         }
-        for (int friendId : user.getFriends()) {
-            jdbcTemplate.update(USER_GET_FRIENDS_QUERY, id, friendId);
-        }
+        user.getFriends().stream()
+                .forEach(
+                        friendId -> jdbcTemplate.update(USER_GET_FRIENDS_QUERY, id, friendId)
+                );
         jdbcTemplate.update(USER_DELETE_QUERY, id);
         return user;
 
