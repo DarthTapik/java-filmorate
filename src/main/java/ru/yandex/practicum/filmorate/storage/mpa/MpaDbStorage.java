@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.mpa;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,6 +13,7 @@ import java.sql.*;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class MpaDbStorage implements MpaStorage {
 
     private final JdbcTemplate jdbcTemplate;
@@ -21,11 +23,6 @@ public class MpaDbStorage implements MpaStorage {
     private static final String MPA_DELETE_QUERY = "DELETE Mpa WHERE mpa_id = ?";
     private static final String MPA_GET_QUERY = "SELECT * FROM Mpa WHERE mpa_id = ?";
     private static final String MPA_GET_ALL_QUERY = "SELECT * FROM Mpa";
-
-
-    public MpaDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public Mpa addMpa(Mpa mpa) {

@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository("userDbStorage")
-@Slf4j
+@RequiredArgsConstructor
 public class UserDbStorage implements UserStorage {
     private static final String USER_INSERT_QUERY =
             "INSERT INTO Users(email, login, name, birthday)" +
@@ -42,11 +41,6 @@ public class UserDbStorage implements UserStorage {
             "DELETE Users_Friends " +
                     "WHERE user_id = ? AND friend_id = ?";
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public UserDbStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public User addUser(User user) {
