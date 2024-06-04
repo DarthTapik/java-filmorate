@@ -1,9 +1,14 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
@@ -14,6 +19,9 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+@JdbcTest
+@AutoConfigureTestDatabase
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmControllerTest {
 
     FilmController filmController;
@@ -24,7 +32,7 @@ public class FilmControllerTest {
         filmController = new FilmController(new FilmService(new InMemoryFilmStorage(),
                 new UserService(new InMemoryUserStorage())));
         film = new Film(0, "Звездные войны", "Фильм о событиях далекой галактики",
-                LocalDate.of(1977, Month.MAY, 25), 121, new HashSet<>(), 0);
+                LocalDate.of(1977, Month.MAY, 25), 121, new HashSet<>(), 0, new HashSet<>(), new Mpa());
     }
 
     @Test

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UserOperationException;
@@ -11,12 +12,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
-
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public User getUser(int id) {
         return userStorage.getUser(id);
@@ -33,8 +31,6 @@ public class UserService {
     }
 
     public User updateUser(User user) {
-        User oldUser = userStorage.getUser(user.getId());
-        user.setFriends(oldUser.getFriends());
         log.debug("Обновлен пользователь с id " + user.getId());
         return userStorage.updateUser(user);
     }
@@ -47,8 +43,8 @@ public class UserService {
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
         user.addFriend(friend.getId());
-        friend.addFriend(user.getId());
-        log.debug("Пользователь " + userId + " добавил в друзья " + friendId);
+        userStorage.updateUser(user);
+        log.info("Пользователь " + userId + " добавил в друзья " + friendId);
     }
 
     public void removeFriendFromUser(int userId, int friendId) {
@@ -58,9 +54,8 @@ public class UserService {
         User user = userStorage.getUser(userId);
         User friend = userStorage.getUser(friendId);
         user.removeFriend(friend.getId());
-        friend.removeFriend(user.getId());
         log.debug("Пользователь " + userId + " убрал из друзей " + friendId);
-
+        userStorage.updateUser(user);
     }
 
     public Collection<User> getUsersFriends(int userId) {

@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Film {
 
     private Integer id;
@@ -22,8 +24,10 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Длительность не может быть отрицательной")
     private int duration;
-    private Set<Integer> likes;
+    private Set<Integer> likes = new HashSet<>();
     private int likesCount = 0;
+    private Set<Genre> genres = new HashSet<>();
+    private Mpa mpa;
 
     @AssertTrue(message = "Дата релиза не может быть раньше чем 28 Декабря 1895 года")
     private boolean isValidReleaseDate() {

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import jakarta.validation.constraints.*;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Integer id;
     @Email(message = "Неверный формат email")
@@ -24,7 +26,7 @@ public class User {
     private String name;
     @PastOrPresent
     private LocalDate birthday;
-    private Set<Integer> friends;
+    private Set<Integer> friends = new HashSet<>();
 
     public String getName() {
         if (name != null) {
@@ -45,5 +47,5 @@ public class User {
     public void removeFriend(int id) {
         friends.remove(id);
     }
-
 }
+
